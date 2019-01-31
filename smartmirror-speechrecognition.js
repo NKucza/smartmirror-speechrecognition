@@ -7,7 +7,7 @@ Module.register('smartmirror-speechrecognition', {
     /**
      */
     defaults: {
-        
+        debug : true
     },
 
     /**
@@ -61,7 +61,7 @@ Module.register('smartmirror-speechrecognition', {
             const debug_en = document.createElement('div');
             debug_en.innerHTML = this.debugInformation_en;
             voice.appendChild(debug_en);
-			const debug_ger = document.createElement('div');
+	    const debug_ger = document.createElement('div');
             debug_ger.innerHTML = this.debugInformation_ger;
             voice.appendChild(debug_ger);
         }

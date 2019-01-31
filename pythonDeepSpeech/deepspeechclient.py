@@ -50,7 +50,7 @@ CHUNK = 1024  # CHUNKS of bytes to read each time from mic
 FORMAT = pyaudio.paInt32
 CHANNELS = 1
 RATE = 16000
-THRESHOLD = 1500 #2200  # The threshold intensity that defines silence
+THRESHOLD = 1800 #2200  # The threshold intensity that defines silence
                   # and noise signal (an int. lower than THRESHOLD is silence).
 
 SILENCE_LIMIT = 1.5  # Silence limit in seconds. The max ammount of seconds where
@@ -99,34 +99,34 @@ def listen_for_speech(threshold=THRESHOLD, num_phrases=-1):
                 started = True
             audio2send.append(cur_data)
         elif (started is True):
-			if(sum([x < THRESHOLD -200 for x in slid_win]) > 0):
-				try:
-					# The limit was reached, finish capture and deliver.
-					sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-					sock.connect((args.host_ip, args.host_port))
-					sent = ''.join(list(prev_audio) + audio2send)
-					sock.sendall(struct.pack('>i', len(sent)) + sent)
-					# Receive data from the server and shut down
-					received = sock.recv(1024)
-					to_node("result", "{}".format(received))
-					sock.close()
+            if(sum([x < THRESHOLD -200 for x in slid_win]) > 0):
+                try:
+                    # The limit was reached, finish capture and deliver.
+                    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    sock.connect((args.host_ip, args.host_port))
+                    sent = ''.join(list(prev_audio) + audio2send)
+                    sock.sendall(struct.pack('>i', len(sent)) + sent)
+                    # Receive data from the server and shut down
+                    received = sock.recv(1024)
+                    to_node("result", "{}".format(received))
+                    sock.close()
 					         
 
-					# Remove temp file. Comment line to review.
-					#os.remove(filename)
-					# Reset all
+                    # Remove temp file. Comment line to review.
+                    #os.remove(filename)
+                    # Reset all
 	
-				except:
-					to_node("status", "failed to send to ASR server")
+                except:
+                    to_node("status", "failed to send to ASR server")
 
-				started = False
-				slid_win = deque(maxlen=SILENCE_LIMIT * rel)
-				prev_audio = deque(maxlen=PREV_AUDIO * rel) 
-				audio2send = []
-				n -= 1
+                started = False
+                slid_win = deque(maxlen=SILENCE_LIMIT * rel)
+                prev_audio = deque(maxlen=PREV_AUDIO * rel) 
+                audio2send = []
+                n -= 1
 
-			else:
-				audio2send.append(cur_data)
+            else:
+                audio2send.append(cur_data)
         else:
             prev_audio.append(cur_data)
 
