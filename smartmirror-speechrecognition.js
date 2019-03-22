@@ -1,9 +1,7 @@
 Module.register('smartmirror-speechrecognition', {
 
-    /** @member {string} icon - Microphone icon. */
-    icon: 'fa-microphone-slash',
     /** @member {boolean} pulsing - Flag to indicate listening state. */
-    pulsing: true,
+    aktive: false,
     /**
      */
     defaults: {
@@ -17,7 +15,6 @@ Module.register('smartmirror-speechrecognition', {
      */
     start() {
         Log.info(`Starting module: ${this.name}`);
-        this.mode = this.translate('INIT');
         Log.info(`${this.name} is waiting for voice command registrations.`);
 		this.sendSocketNotification('SPEECH_REC_START', this.config);
 		this.debugInformation_en = "";
@@ -47,15 +44,19 @@ Module.register('smartmirror-speechrecognition', {
         const voice = document.createElement('div');
         voice.classList.add('small', 'align-right');
 
+
         const icon = document.createElement('i');
-        icon.classList.add('fa', this.icon, 'icon');
-        if (this.pulsing) {
-            icon.classList.add('pulse');
-        }
+		if(this.aktive == true){
+       		icon.classList.add('fa', 'fa-microphone', 'icon');
+        	icon.classList.add('pulse');
+		} else {
+			icon.classList.add('fa', 'fa-microphone-slash', 'icon');
+		}
+
         voice.appendChild(icon);
 
         const modeSpan = document.createElement('span');
-        modeSpan.innerHTML = " Speech recognition results";
+        modeSpan.innerHTML = "  Speech recognition results";
         voice.appendChild(modeSpan);
         if (this.config.debug) {
             const debug_en = document.createElement('div');
@@ -80,11 +81,7 @@ Module.register('smartmirror-speechrecognition', {
      * @param {*} payload - Detailed payload of the notification.
      */
     socketNotificationReceived(notification, payload) {
-        if (notification === 'SPEECH_REC_READY') {
-            this.icon = 'fa-microphone';
-            this.mode = this.translate('NO_MODE');
-            this.pulsing = false;
-        } else if (notification === 'SPEECH_REC_RESULT_EN') {
+        if (notification === 'SPEECH_REC_RESULT_EN') {
 			this.debugInformation_en = payload;
 			this.sendNotification("TRANSCRIPT_EN", payload);
 		} else if (notification === 'SPEECH_REC_RESULT_GER') {
@@ -92,5 +89,13 @@ Module.register('smartmirror-speechrecognition', {
 			this.sendNotification("TRANSCRIPT_DE", payload);
 		} 
         this.updateDom(300);
-    }
+    },
+
+	notificationReceived: function(notification, payload, sender) {
+
+		if (notification === 'SPEECHREC_AKTIV') {
+			this.aktive = payload;
+		}
+		this.updateDom(0);
+	}
 });

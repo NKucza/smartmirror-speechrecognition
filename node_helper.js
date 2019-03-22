@@ -99,7 +99,6 @@ module.exports = NodeHelper.create({
             /** @member {Object} config - Module config. */
             this.config = payload;
 			this.start_deepspeech_python_script();
-            this.sendSocketNotification('SPEECH_REC_READY');
 			console.log("[MSG " + self.name + "] " + " started");
         }
     },
