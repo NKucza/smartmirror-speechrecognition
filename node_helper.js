@@ -1,30 +1,6 @@
-/**
- * @file node_helper.js
- *
- * @author fewieden
- * @license MIT
- *
- * @see  https://github.com/fewieden/MMM-voice
- */
-
-/**
- * @external node_helper
- * @see https://github.com/MichMich/MagicMirror/blob/master/modules/node_modules/node_helper/index.js
- */
 const NodeHelper = require('node_helper');
 const {PythonShell} = require('python-shell');
 
-/**
- * @module node_helper
- * @description Backend for the module to query data from the API providers.
- *
- * @requires external:pocketsphinx-continuous
- * @requires external:fs
- * @requires external:child_process
- * @requires external:lmtool
- * @requires Bytes
- * @requires external:node_helper
- */
 module.exports = NodeHelper.create({
 
     /** @member {boolean} listening - Flag to indicate listen state. */
