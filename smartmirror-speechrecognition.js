@@ -1,3 +1,12 @@
+/**
+ * @file smartmirror-speechrecongnition.js
+ *
+ * @author nkucza
+ * @license MIT
+ *
+ * @see  https://github.com/NKucza/smartmirror-speechrecognition
+ */
+
 Module.register('smartmirror-speechrecognition', {
 
     /** @member {boolean} pulsing - Flag to indicate listening state. */
