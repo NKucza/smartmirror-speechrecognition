@@ -30,7 +30,19 @@ module.exports = NodeHelper.create({
     start_deepspeech_python_script: function () {
 		const self = this;
 		console.log("[MSG " + self.name + "] " + " starting speech recognition");
-		self.en_pyshell = new PythonShell('modules/' + this.name + '/pythonDeepSpeech/deepspeechclient.py', {pythonPath: 'python' });
+		//self.en_pyshell = new PythonShell('modules/' + this.name + '/pythonDeepSpeech/deepspeechclient.py', {pythonPath: 'python' });
+		let options = {
+			pythonPath: 'python3',
+			args: ['-v 3', 
+			'-m', '/opt/dev/dependencies/DeepSpeech/models/output_graph.pbmm',
+			'-l', '/opt/dev/dependencies/DeepSpeech/models/lm.binary',
+			'-t','/opt/dev/dependencies/DeepSpeech/models/trie',
+			'-d', '0',
+			'-a', '/opt/dev/dependencies/DeepSpeech/models/alphabet.txt',
+			'-w', '/opt/dev/dependencies/DeepSpeech/tmp']
+		  };
+		
+		self.en_pyshell = new PythonShell('modules/' + this.name + '/pythonDeepSpeech/mic_vad_streaming.py', options);
 
     		self.en_pyshell.on('message', function (message_string) {
 		try{	
